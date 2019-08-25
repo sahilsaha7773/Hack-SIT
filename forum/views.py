@@ -83,3 +83,19 @@ def post_list(request):
 	    # If page is out of range deliver last page of results
 	    posts = paginator.page(paginator.num_pages)
 	return render(request, 'forum/list.html', {'section': 'home','posts':posts, 'page':page})
+
+@login_required
+def post_delete(request, id, slug):
+    post= get_object_or_404(Question, id=id, slug=slug) 
+    if post.user == request.user:   
+    	if request.method=='POST':
+    		post.delete()
+    		return redirect(post_list)
+    else:
+    	return HttpResponse('You are not authorized to delete this post')
+        
+    return render(request, 'forum/del_conf.html', {'object':post})
+
+@login_required
+def delete_done():
+	return render(request, 'forum/del_done.html')

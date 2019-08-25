@@ -1,0 +1,7 @@
+<div style="margin: 20px 0 0 20px;">
+	<h1>Delete Post</h1>
+	<form method="post">{% csrf_token %}
+	    <p>Are you sure you want to delete "{{ object }}" ?</p>
+	    <input class="btn btn-info" type="submit" value="Yes" />
+	</form>
+</div>

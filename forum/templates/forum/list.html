@@ -22,7 +22,7 @@
 <body>
     <div>
         <nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
-            <div class="container"><a class="navbar-brand" href="#">GDG Siliguri</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="container"><a class="navbar-brand" href="{% url 'list' %}">GDG Siliguri</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse"
                     id="navcol-1">
                     <ul class="nav navbar-nav mr-auto">
@@ -41,12 +41,36 @@
         </nav>
     </div>
     <h3 style="margin: 30px 0 0 40px;opacity: 0.64;">Welcome to our coding forum!</h3>
+   <!--  <form action="." method="post" >
+        <div class="form-group">
+            {{form.as_p}}
+            
+            {% csrf_token %}
+            <p> <button type="submit" class="btn btn-info" value="search">Search</button></p>
+            </div>
+        
+    </form> -->
+    {% if tag %}
+        <h5 style="opacity: 0.5;margin: 30px;">Questions related to {{ tag.name }}</h5>
+    {% endif %}
     <div class="card-group" style="margin: 40px;">
+       
         {% for post in posts %}
             <div class="card" style="margin: 0px;">
                 <div class="card-body">
                     <h4 class="card-title">{{post.question}}</h4>
+                    <!-- <p style="opacity: 0.5;">
+                        Topics:
+                        {% for tag in post.topics.all %}
+                            <a href="{% url 'forum:post_list_by_tag' tag.slug %}">
+                                {{tag.name}}
+                            </a>
+                        {% endfor %}
+                    </p> -->
                     <p class="card-text">{{ post.content|safe|truncatewords:5|linebreaks }}</p></code></pre></table>
+                    {% if post.user == request.user %}
+                        <a class="btn btn-info" href="{% url 'forum:delete' post.id post.slug %}">delete</a>
+                    {% endif %}
                     <a class="btn btn-primary" href="{{post.get_absolute_url}}">Read More</a></div>
             </div>
         {% endfor %}
@@ -94,8 +118,7 @@
     <script src="assets/js/clean-blog.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
     <script src="{% static "tinymce/js/prism.js" %}"></script>
-    <script> window.fbMessengerPlugins = window.fbMessengerPlugins || { init : function() { FB.init({ appId: "1678638095724206", xfbml: true, version: "v3.0" }); }, callable : [] }; window.fbMessengerPlugins.callable.push( function() { var ruuid, fbPluginElements = document.querySelectorAll(".fb-messenger-checkbox[page_id='111718850196464']"); if (fbPluginElements) { for( i = 0; i < fbPluginElements.length; i++ ) { ruuid = 'cf_' + (new Array(16).join().replace(/(.|$)/g, function(){return ((Math.random()*36)|0).toString(36)[Math.random()<.5?"toString":"toUpperCase"]();})); fbPluginElements[i].setAttribute('user_ref', ruuid) ; fbPluginElements[i].setAttribute('origin', window.location.href); window.confirmOptIn = function() { FB.AppEvents.logEvent('MessengerCheckboxUserConfirmation', null, { app_id:"1678638095724206", page_id:"111718850196464", ref:"", user_ref: ruuid }); }; } } }); window.fbAsyncInit = window.fbAsyncInit || function() { window.fbMessengerPlugins.callable.forEach( function( item ) { item(); } ); window.fbMessengerPlugins.init(); }; setTimeout( function() { (function(d, s, id){ var js, fjs = d.getElementsByTagName(s)[0]; if (d.getElementById(id)) { return; } js = d.createElement(s); js.id = id; js.src = "//connect.facebook.net/en_US/sdk.js"; fjs.parentNode.insertBefore(js, fjs); }(document, 'script', 'facebook-jssdk')); }, 0); </script>
-     <div class="fb-customerchat" origin="" page_id="111718850196464" messenger_app_id="1678638095724206" user_ref="" prechecked="true" allow_login="true" size="large"></div>
+
 </body>
 
 </html>
