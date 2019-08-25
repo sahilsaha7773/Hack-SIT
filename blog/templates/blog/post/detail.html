@@ -71,6 +71,7 @@
                         <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'logout' %}">Log-out</a></li>
                         
                   {% else %}
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'list' %}">Forum</a></li>
                     <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'login' %}">Log-in</a></li>
                 {% endif %}
                 </ul>

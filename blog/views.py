@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from common.decorators import ajax_required
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
+from taggit.models import Tag
+from django.db.models import Count
 
 # Create your views here.
 @login_required
@@ -31,11 +33,11 @@ def post_detail(request, year, month, day, post):
     else:
       comment_form = CommentForm()
 
-    # post_tags_ids = post.tags.values_list('id', flat=True)
-    # similar_posts = Post.published.filter(tags__in=post_tags_ids).exclude(id=post.id)
-    # similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags','-publish')[:4]
+    post_tags_ids = post.tags.values_list('id', flat=True)
+    similar_posts = Post.published.filter(tags__in=post_tags_ids).exclude(id=post.id)
+    similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags','-publish')[:4]
 
-    return render(request,'blog/post/detail.html',{'post': post, 'new_comment':new_comment, 'comment_form':comment_form, 'comments':comments})
+    return render(request,'blog/post/detail.html',{'post': post, 'new_comment':new_comment, 'comment_form':comment_form, 'comments':comments, 'similar_posts':similar_posts})
 
 @ajax_required
 @login_required

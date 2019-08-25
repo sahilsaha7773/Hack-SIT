@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.conf import settings
 from tinymce import HTMLField
+from taggit.managers import TaggableManager
 
 # Create your models here.
 
@@ -35,7 +36,8 @@ class Post(models.Model):
   objects = models.Manager() # The default manager. 
   published = PublishedManager() # Our custom manager.
   users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='posts_liked', blank=True)
-
+  tags = TaggableManager()
+  
   class Meta: 
       ordering = ('-publish',) 
 

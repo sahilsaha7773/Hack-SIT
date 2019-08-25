@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from blog.models import Post
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from taggit.models import Tag
 
 # Create your views here.
 
@@ -29,13 +30,13 @@ def user_login(request):
 		form = LoginForm()
 	return render(request, 'account/login.html', {'form': form})
 
-def home(request):
+def home(request, tag_slug=None):
 	object_list = Post.published.all()
-	# tag = None
+	tag = None
 
-	# if tag_slug:
-	# 	tag = get_object_or_404(Tag, slug=tag_slug)
-		#object_list = object_list.filter(tags__in=[tag])
+	if tag_slug:
+		tag = get_object_or_404(Tag, slug=tag_slug)
+		object_list = object_list.filter(tags__in=[tag])
 
 	paginator = Paginator(object_list, 3) # 3 posts in each page
 	page = request.GET.get('page')
@@ -47,7 +48,7 @@ def home(request):
 	except EmptyPage:
 	    # If page is out of range deliver last page of results
 	    posts = paginator.page(paginator.num_pages)
-	return render(request, 'account/home.html', {'section': 'home','posts':posts, 'page':page})
+	return render(request, 'account/home.html', {'section': 'home','posts':posts, 'page':page, 'tag':tag})
 
 def register(request):
 	if request.method == 'POST':

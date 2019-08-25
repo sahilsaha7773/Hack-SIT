@@ -25,7 +25,7 @@ SECRET_KEY = 'mz5zgs03f64u4=ro4xnob&)2-&z-$i^_l(v_m&mw53egbl3kyy'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['hack-sit.herokuapp.com',]
+ALLOWED_HOSTS = ['hack-sit.herokuapp.com','127.0.0.1']
 
 
 # Application definition
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'forum.apps.ForumConfig',
     'tinymce',
     'star_ratings',
+    'taggit',
 ]
 
 MIDDLEWARE = [

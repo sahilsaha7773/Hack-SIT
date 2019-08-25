@@ -9,4 +9,5 @@ urlpatterns = [
 	path('register/', views.register, name='register'),
 	path('blog/', include('blog.urls', namespace='blog')),
 	path('forum/', fviews.post_list, name='list'),
+	path('tag/<slug:tag_slug>/',views.home, name='post_list_by_tag'),
 ]
