@@ -1,0 +1,270 @@
+{% load staticfiles %}
+
+<title>{{ post.title }}</title> 
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <title>Blog Post - GDG Siliguri</title>
+  <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.css">
+  <link rel="stylesheet" href="{% static 'assets/css/Login-Form-Clean.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/Navigation-with-Button.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/Registration-Form-with-Photo.css' %}">
+  <style type="text/css">
+    /* The Modal (background) */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      padding-top: 100px; /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
+
+    /* The Close Button */
+    .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    @media screen and (max-width: 600px) {
+
+        textarea {
+          width: 100% !important;
+        }
+      }
+  </style>
+  <nav class="navbar navbar-light navbar-expand-lg fixed-top" id="mainNav">
+        <div class="container"><a class="navbar-brand" href="{% url 'home' %}">GDG Siliguri</a><button data-toggle="collapse" data-target="#navbarResponsive" class="navbar-toggler" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
+            <div
+                class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                    
+                    {% if request.user.is_authenticated %}
+                      <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'list' %}">Forum</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'logout' %}">Log-out</a></li>
+                        
+                  {% else %}
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'login' %}">Log-in</a></li>
+                {% endif %}
+                </ul>
+        </div>
+        </div>
+    </nav>
+    <header class="masthead" style="background-image:url('{% static 'assets/img/Google-Developer-Group.png' %}')";>
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-lg-8 mx-auto">
+                    <div class="post-heading">
+                        <h1>{{post.title}}</h1>
+                        <h2 class="subheading"></h2><span class="meta">Posted by&nbsp;{{post.author}}&nbsp;{{post.publish}}</span></div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-lg-8 mx-auto">
+                    <p>{{post.body|safe}}</p>
+                </div>
+            </div>
+        </div>
+    </article>
+    <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-lg-8 mx-auto">
+                  {% with total_likes=post.users_liked.count users_liked=post.users_liked.all %}
+                  <br>
+                  <span class="count">
+                    <span class="total">{{ total_likes }}</span>
+                    like{{ total_likes|pluralize }}
+                  </span>
+                  <a id="myBtn">(Liked by)</a>
+                  <div id="myModal" class="modal">
+
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                      <span class="close">&times;</span>
+                      {% for user in post.users_liked.all %}
+                        <div>
+                          <p>
+                            {{ user.first_name }}</p>
+                        </div>
+                        {% empty %}
+                          Nobody likes this image yet.
+                        {% endfor %}
+                    </div>
+
+                  </div>
+                  
+                  <script>
+                  // Get the modal
+                  var modal = document.getElementById("myModal");
+
+                  // Get the button that opens the modal
+                  var btn = document.getElementById("myBtn");
+
+                  // Get the <span> element that closes the modal
+                  var span = document.getElementsByClassName("close")[0];
+
+                  // When the user clicks the button, open the modal 
+                  btn.onclick = function() {
+                    modal.style.display = "block";
+                  }
+
+                  // When the user clicks on <span> (x), close the modal
+                  span.onclick = function() {
+                    modal.style.display = "none";
+                  }
+
+                  // When the user clicks anywhere outside of the modal, close it
+                  window.onclick = function(event) {
+                    if (event.target == modal) {
+                      modal.style.display = "none";
+                    }
+                  }
+                  </script>
+                  <a href="#" class="btn btn-info like button" data-id="{{post.id}}" data-action="{% if request.user in users_liked %}un{% endif %}like">
+                    {% if request.user not in users_liked %}
+                      Like
+                    {% else %}
+                      Unlike
+                    {% endif %}
+                  </a>
+                  {% endwith %}
+                </div>
+              </div>
+            </div>
+
+    <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-lg-8 mx-auto">
+                  {% with comments.count as total_comments %}
+                    <h2>
+                      {{total_comments}} comment{{total_comments|pluralize}}
+                    </h2>
+                  {% endwith %}
+
+                  {% for comment in comments %}
+                     <div class="card" style="margin-bottom: 20px;">
+                      <div class="card-body">
+                        {{comment.author}},
+                         {{comment.created_at}}
+                          <hr>
+                      {{comment.body|linebreaks}}
+                    </div>  
+                  </div>
+                  {% empty %}
+                    <p>There are no comments yet</p>
+                  {% endfor %}
+
+                  {% if new_comment %}
+                    <h2>Your Comment has been added</h2>
+                  {% else %}
+                    <h2>Add a new comment</h2>
+                    <form  class="form-group" action="." method="post">
+                      {{comment_form.as_p}}
+                      {% csrf_token %}
+                      <p><input class="btn btn-info" type="submit" value="Add Comment"></p>
+                    </form>
+                  {% endif %}
+                  </div>
+              </div>
+        </div>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-lg-8 mx-auto">
+                    <ul class="list-inline text-center">
+                        <li class="list-inline-item"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-twitter fa-stack-1x fa-inverse"></i></span></li>
+                        <li class="list-inline-item"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x fa-inverse"></i></span></li>
+                        <li class="list-inline-item"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-github fa-stack-1x fa-inverse"></i></span></li>
+                    </ul>
+                    <p class="text-muted copyright">Copyright&nbsp;©&nbsp;GDG Siliguri 2018</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/bs-animation.js"></script>
+    <script src="assets/js/clean-blog.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script>
+      var csrftoken = Cookies.get('csrftoken');
+      function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+      }
+      $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+          }
+        }
+      });
+      $(document).ready(function(){
+        
+          $('a.like').click(function(e){
+            console.log("Hey! CLicked!")
+            e.preventDefault();
+            $.post('{% url "blog:like" %}',
+              {
+
+                id: $(this).data('id'),
+                action: $(this).data('action')
+              },
+
+              function(data){
+                if (data['status'] == 'ok')
+                {
+                  console.log(data['status'])
+                  var previous_action = $('a.like').data('action');
+
+                  // toggle data-action
+                  $('a.like').data('action', previous_action == 'like' ? 'unlike' : 'like');
+                  // toggle link text
+                  $('a.like').text(previous_action == 'like' ? 'Unlike' : 'Like');
+
+                  // update total likes
+                  var previous_likes = parseInt($('span.count .total').text());
+                  $('span.count .total').text(previous_action == 'like' ? previous_likes + 1 : previous_likes - 1);
+                }
+                console.log(data['status'])
+               
+              }
+            );
+          });
+        
+         });
+    </script>
